@@ -10,7 +10,10 @@
     <Grid Background="#FFFCD3">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Margin="12">
             <Grid.ColumnDefinitions>
@@ -31,6 +34,39 @@
             <Image Source="ms-appx:///Assets/pomodorosmall.png"
                    Grid.Column="3"
                    Stretch="Uniform" Height="30"></Image>
+        </Grid>
+        <Grid x:Name="TimerGrid" Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="M" Foreground="#7B808D" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30"></TextBlock>
+            <TextBlock Grid.Column="1" Text="00 : 00" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" FontWeight="Bold" Foreground="#404452"
+                       FontFamily="ms-appx:/Assets/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold"
+                       FontSize="60"/>
+            <TextBlock Grid.Column="2" Text="S" Foreground="#7B808D" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="2" Background="#F7676A" Height="45">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Content="NEXT" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="0" ></Button>
+            <Button Content="PAUSE" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="1"></Button>
+            <Button Content="STOP" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="2"></Button>
+            <Button Content="BREAK" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="3"></Button>
+        </Grid>
+        <Grid Grid.Row="3" Background="White">
+            
+        </Grid>
+        <Grid Grid.Row="4" Background="#F7676A">
+            <Button x:Name="AddNewTask" Content="New Task" Background="Transparent" BorderBrush="#F7676A"
+                    Foreground="White" FontSize="20" Height="45"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Button>
         </Grid>
     </Grid>
 </Page>
