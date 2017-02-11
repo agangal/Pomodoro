@@ -13,27 +13,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Pomodoro
+namespace Pomodoro.Pages
 {
-    using Pomodoro.Pages;
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class TimerPage : Page
     {
-        public MainPage()
+        public TimerPage()
         {
             this.InitializeComponent();
-            Frame rootframe = Window.Current.Content as Frame;
-            rootframe.Navigate(typeof(Pages.TimerPage));
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            
         }
     }
 }
