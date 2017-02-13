@@ -9,11 +9,13 @@ namespace Pomodoro.Model
     public class TasksModel
     {
         public string task { get; set; }
-        public List<TaskHistory> histiry { get; set; }
+        public int current_pomodoro { get; set; }
+        public List<TaskHistory> history { get; set; }
     }
 
     public class TaskHistory
     {
+        public DateTime startTime;
         public TimeSpan timespan_completed { get; set; }
         public timespan_type type { get; set; }
     }
