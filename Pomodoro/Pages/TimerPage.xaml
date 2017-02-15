@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Content="NEXT" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="0" ></Button>
+                <Button x:Name="NextPomodoro" Click="NextPomodoro_Click" Content="NEXT" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="0" ></Button>
                 <Button x:Name="PauseTimer" Content="PAUSE" HorizontalAlignment="Stretch" Click="PauseTimer_Click" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="1"></Button>
                 <Button x:Name="ContinueTimer" Visibility="Collapsed" Content="CONTINUE" HorizontalAlignment="Stretch" Click="ContinueTimer_Click" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="1"></Button>
                 <Button Content="FINISH" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" FontFamily="ms-appx:/Assets/Fonts/Montserrat-Light.ttf#Montserrat Light" Foreground="White" Grid.Column="2"></Button>

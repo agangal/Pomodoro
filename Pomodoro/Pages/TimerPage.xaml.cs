@@ -57,6 +57,22 @@ namespace Pomodoro.Pages
             }
         }
 
+        private void StartNewPomodoro()
+        {
+            if (Settings.CompletedPomodoro == 0)
+            {
+                StartFreshTimer();
+            }
+            else if (Settings.CompletedPomodoro == 4)
+            {
+                StopTimer();
+            }
+            else
+            {
+                Timer.Tick += Timer_Tick;
+                Timer.Start();
+            }
+        }
         private void StopTimer()
         {
             try
@@ -82,9 +98,7 @@ namespace Pomodoro.Pages
             long remtime = 0;
             if (elapsedSeconds >= Settings.TimerLengthInSec)
             {
-                Timer.Tick -= Timer_Tick;
-                Timer.Stop();
-                Settings.CompletedPomodoro = Settings.CompletedPomodoro + 1;
+                MarkPomodoroComplete();
                 //Set everything to 0;
                 //Save data
             }
@@ -159,6 +173,10 @@ namespace Pomodoro.Pages
             ContinueTimer.Visibility = Visibility.Collapsed;
         }
 
+        private void NextPomodoro_Click(object sender, RoutedEventArgs e)
+        {
+            MarkPomodoroComplete();
+        }
 
         public string ConvertSecToMMSS(long seconds)
         {
@@ -175,6 +193,26 @@ namespace Pomodoro.Pages
             //string res = ((seconds / 60).ToString().Length <= 1 ? ("0" + (seconds / 60).ToString()) : ((seconds / 60).ToString()) + " : " + ((seconds % 60).ToString().Length <= 1 ? ("0" + (seconds % 60).ToString()) : (seconds % 60).ToString()));
             string res = mm + " : " + ss;
             return res;
+        }
+
+        public void MarkPomodoroComplete()
+        {
+            Timer.Tick -= Timer_Tick;
+            Timer.Stop();
+            Settings.CompletedPomodoro = Settings.CompletedPomodoro + 1;
+            
+        }
+
+        public void NextPomodoroStep()
+        {
+            switch (Settings.CompletedPomodoro)
+            {
+                case 0: Settings.TimerLengthInSec = 
+            }
+        }
+        public void MarkTaskComplete()
+        {
+
         }
 
     }
