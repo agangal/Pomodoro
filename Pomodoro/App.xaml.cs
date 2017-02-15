@@ -103,4 +103,22 @@ namespace Pomodoro
             deferral.Complete();
         }
     }
+
+    public enum PomodoroSteps
+    {
+        Pomodoro_Step0,
+        Pomodoro_Break0,
+        Pomodoro_Step1,
+        Pomodoro_Break1,
+        Pomodoro_Step2,
+        Pomodoro_Break2,
+        Pomodoro_Step3,
+        Pomodoro_Break3
+    }
+
+    public enum PomodoroBreakType
+    {
+        Pomodoro_ShortBreak,
+        Pomodor_LongBreak
+    }
 }
