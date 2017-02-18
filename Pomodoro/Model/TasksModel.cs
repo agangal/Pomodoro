@@ -17,7 +17,8 @@ namespace Pomodoro.Model
     {
         public DateTime startTime;
         public TimeSpan timespan_completed { get; set; }
-        public timespan_type type { get; set; }
+        public PomodoroSteps Step { get; set; }
+        public timespan_type PomodorType { get; set; }
     }
 
     public enum timespan_type
