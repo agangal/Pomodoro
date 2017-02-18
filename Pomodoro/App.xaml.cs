@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Pomodoro
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Reflection;
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
@@ -102,20 +105,76 @@ namespace Pomodoro
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        public static string GetDescription(PomodoroSteps value)
+        {
+            DisplayAttribute attribute = value.GetType()
+            .GetField(value.ToString())
+            .GetCustomAttributes(typeof(DisplayAttribute), false)
+            .SingleOrDefault() as DisplayAttribute;
+            return attribute == null ? value.ToString() : attribute.Description;
+        }
+
+        public static PomodoroSteps GetEnumFromDescription(string description)
+        {
+           switch (description)
+            {
+                case "Step0":
+                    return (PomodoroSteps.Pomodoro_Step0);
+                    break;
+                case "Break0":
+                    return (PomodoroSteps.Pomodoro_Break0);
+                    break;
+                case "Step1":
+                    return (PomodoroSteps.Pomodoro_Step1);
+                    break;
+                case "Break1":
+                    return (PomodoroSteps.Pomodoro_Break1);
+                    break;
+                case "Step2":
+                    return (PomodoroSteps.Pomodoro_Step2);
+                    break;
+                case "Break2":
+                    return (PomodoroSteps.Pomodoro_Break2);
+                    break;
+                case "Step3":
+                    return (PomodoroSteps.Pomodoro_Step3);
+                    break;
+                case "Break3":
+                    return (PomodoroSteps.Pomodoro_Break3);
+                    break;
+                case "Stop":
+                    return PomodoroSteps.Pomodoro_Stop;
+                    break;
+                default: return PomodoroSteps.Pomodoro_Break0;
+                    break;
+            }
+        }
     }
 
     public enum PomodoroSteps
     {
+        [Display(Description = "Step0")]
         Pomodoro_Step0,
+        [Display(Description = "Break0")]
         Pomodoro_Break0,
+        [Display(Description = "Step1")]
         Pomodoro_Step1,
+        [Display(Description = "Break1")]
         Pomodoro_Break1,
+        [Display(Description = "Step2")]
         Pomodoro_Step2,
+        [Display(Description = "Break2")]
         Pomodoro_Break2,
+        [Display(Description = "Step3")]
         Pomodoro_Step3,
-        Pomodoro_Break3
+        [Display(Description = "Break3")]
+        Pomodoro_Break3,
+        [Display(Description = "Break3")]
+        Pomodoro_Stop
     }
 
+   
     public enum PomodoroBreakType
     {
         Pomodoro_ShortBreak,

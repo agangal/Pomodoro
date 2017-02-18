@@ -89,6 +89,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\donearrow.png" />
     <Content Include="Assets\Fonts\Montserrat-Black.ttf" />
     <Content Include="Assets\Fonts\Montserrat-BlackItalic.ttf" />
     <Content Include="Assets\Fonts\Montserrat-Bold.ttf" />
