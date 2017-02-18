@@ -37,7 +37,14 @@ namespace Pomodoro.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            Settings.TickWindowBegin = DateTime.UtcNow.Ticks;         
+            long remtime = UpdateTimerTrackers();
+            if (remtime == 0 && Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Stop))
+            {
+
+            }
+            Settings.TickWindowBegin = DateTime.UtcNow.Ticks;
+           // string str = App.GetDescription(PomodoroSteps.Pomodoro_Step0);
+           // System.Diagnostics.Debug.WriteLine(str);
         }
 
         private void StartFreshTimer()
@@ -45,32 +52,38 @@ namespace Pomodoro.Pages
             try
             {
                 Settings.CompletedPomodoro = 0;
-                Timer = new DispatcherTimer();
-                Timer.Tick += Timer_Tick;
-                Timer.Interval = new TimeSpan(0, 0, 1);
-                Timer.Start();
-                Timer_Tick(null, null);
+                CreateTimer();
             }
             catch (Exception ex)
             {
-                
+                //System.Diagnostics.Tracing.
             }
+        }
+
+        private void CreateTimer()
+        {
+            Timer = new DispatcherTimer();
+            Timer.Tick += Timer_Tick;
+            Timer.Interval = new TimeSpan(0, 0, 1);
+            Settings.TickWindowBegin = DateTime.UtcNow.Ticks;
+            Timer.Start();
+            Timer_Tick(null, null);
         }
 
         private void StartNewPomodoro()
         {
-            if (Settings.CompletedPomodoro == 0)
+            if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Step0))
             {
                 StartFreshTimer();
             }
-            else if (Settings.CompletedPomodoro == 4)
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Stop))
             {
                 StopTimer();
             }
             else
             {
-                Timer.Tick += Timer_Tick;
-                Timer.Start();
+                
+                CreateTimer();
             }
         }
         private void StopTimer()
@@ -93,12 +106,21 @@ namespace Pomodoro.Pages
         private void Timer_Tick(object sender, object e)
         {
             Debug.WriteLine("---Timer_Tick---");
+            long remtime = UpdateTimerTrackers();
+            //long remtime = Settings.RemainingTimerInSec;
+            TimerTextBlock.Text = ConvertSecToMMSS(remtime);
+            //Settings.RemainingTimerInSec = remtime;            
+        }
+
+
+        private long UpdateTimerTrackers()
+        {
             elapsedTicks = DateTime.UtcNow.Ticks - Settings.TickWindowBegin;
             elapsedSeconds = (long)TimeSpan.FromTicks(elapsedTicks).TotalSeconds + Settings.ElapsedSeconds;
             long remtime = 0;
             if (elapsedSeconds >= Settings.TimerLengthInSec)
             {
-                MarkPomodoroComplete();
+                MarkPomodoroStepComplete();
                 //Set everything to 0;
                 //Save data
             }
@@ -109,11 +131,8 @@ namespace Pomodoro.Pages
                 Debug.WriteLine("Remaining Time : " + remtime);
             }
             UpdatePomodoros();
-            //long remtime = Settings.RemainingTimerInSec;
-            TimerTextBlock.Text = ConvertSecToMMSS(remtime);
-            //Settings.RemainingTimerInSec = remtime;            
+            return remtime;
         }
-
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
@@ -123,11 +142,15 @@ namespace Pomodoro.Pages
 
         private async void UpdatePomodoros()
         {
-            if (Settings.CompletedPomodoro == 0)
+            if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Step0))
             {
                 pomodoro_1.Visibility = Visibility.Visible;
                 pomodoro_2.Visibility = Visibility.Visible;
                 pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Collapsed;
+                done_1.Visibility = Visibility.Collapsed;
+                done_2.Visibility = Visibility.Collapsed;
+                done_3.Visibility = Visibility.Collapsed;
                 if (fadestatus) // it is hidden
                 {
                     await pomodoro_0.Fade(1, 500).StartAsync();
@@ -139,15 +162,139 @@ namespace Pomodoro.Pages
                     fadestatus = true;
                 }
             }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Break0))
+            {
+                pomodoro_1.Visibility = Visibility.Visible;
+                pomodoro_2.Visibility = Visibility.Visible;
+                pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Collapsed;
+                done_2.Visibility = Visibility.Collapsed;
+                done_3.Visibility = Visibility.Collapsed;
+                pomodoro_0.Visibility = Visibility.Collapsed;
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Step1))
+            {
+                pomodoro_0.Visibility = Visibility.Collapsed;
+                // pomodoro_.Visibility = Visibility.Visible;
+                pomodoro_2.Visibility = Visibility.Visible;
+                pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Collapsed;
+                done_2.Visibility = Visibility.Collapsed;
+                done_3.Visibility = Visibility.Collapsed;
+                
+                if (fadestatus) // it is hidden
+                {
+                    await pomodoro_1.Fade(1, 500).StartAsync();
+                    fadestatus = false;
+                }
+                else
+                {
+                    await pomodoro_1.Fade(0, 500).StartAsync();
+                    fadestatus = true;
+                }
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Break1))
+            {
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                pomodoro_2.Visibility = Visibility.Visible;
+                pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Collapsed;
+                done_3.Visibility = Visibility.Collapsed;
+                pomodoro_0.Visibility = Visibility.Collapsed;
+            } 
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Step2))
+            {
+                pomodoro_0.Visibility = Visibility.Collapsed;
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                //pomodoro_2.Visibility = Visibility.Visible;
+                pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Collapsed;
+                done_3.Visibility = Visibility.Collapsed;
+                if (fadestatus) // it is hidden
+                {
+                    await pomodoro_2.Fade(1, 500).StartAsync();
+                    fadestatus = false;
+                }
+                else
+                {
+                    await pomodoro_2.Fade(0, 500).StartAsync();
+                    fadestatus = true;
+                }
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Break2))
+            {
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                pomodoro_2.Visibility = Visibility.Collapsed;
+                pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Visible;
+                done_3.Visibility = Visibility.Collapsed;
+                pomodoro_0.Visibility = Visibility.Collapsed;
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Step3))
+            {
+                pomodoro_0.Visibility = Visibility.Collapsed;
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                pomodoro_2.Visibility = Visibility.Collapsed;
+                //pomodoro_3.Visibility = Visibility.Visible;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Visible;
+                done_3.Visibility = Visibility.Collapsed;
+                if (fadestatus) // it is hidden
+                {
+                    await pomodoro_1.Fade(1, 500).StartAsync();
+                    fadestatus = false;
+                }
+                else
+                {
+                    await pomodoro_1.Fade(0, 500).StartAsync();
+                    fadestatus = true;
+                }
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Break3))
+            {
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                pomodoro_2.Visibility = Visibility.Collapsed;
+                pomodoro_3.Visibility = Visibility.Collapsed;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Visible;
+                done_3.Visibility = Visibility.Visible;
+                pomodoro_0.Visibility = Visibility.Collapsed;
+            }
+            else if (Settings.CurrentPomodoroStep == App.GetDescription(PomodoroSteps.Pomodoro_Stop))
+            {
+                pomodoro_1.Visibility = Visibility.Collapsed;
+                pomodoro_2.Visibility = Visibility.Collapsed;
+                pomodoro_3.Visibility = Visibility.Collapsed;
+                done_0.Visibility = Visibility.Visible;
+                done_1.Visibility = Visibility.Visible;
+                done_2.Visibility = Visibility.Visible;
+                done_3.Visibility = Visibility.Visible;
+                pomodoro_0.Visibility = Visibility.Collapsed;
+            }
         }
 
+        /// <summary>
+        /// Start button clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StartTime_Click(object sender, RoutedEventArgs e)
         {
             Settings.TickWindowBegin = DateTime.UtcNow.Ticks;
             //Settings.RemainingTimerInSec = Settings.TimerLengthInSec;
             StartTime.Visibility = Visibility.Collapsed;
             AllOptionsGrid.Visibility = Visibility.Visible;
-            StartFreshTimer();
+            StartNewPomodoro();
         }
       
         private void PauseTimer_Click(object sender, RoutedEventArgs e)
@@ -175,9 +322,14 @@ namespace Pomodoro.Pages
 
         private void NextPomodoro_Click(object sender, RoutedEventArgs e)
         {
-            MarkPomodoroComplete();
+            MarkPomodoroStepComplete();
         }
 
+        /// <summary>
+        /// Convert time to string
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
         public string ConvertSecToMMSS(long seconds)
         {
             string mm = ((int)seconds / 60).ToString();
@@ -195,24 +347,60 @@ namespace Pomodoro.Pages
             return res;
         }
 
-        public void MarkPomodoroComplete()
+        public void MarkPomodoroStepComplete()
         {
-            Timer.Tick -= Timer_Tick;
-            Timer.Stop();
+            StopTimer();
             Settings.CompletedPomodoro = Settings.CompletedPomodoro + 1;
-            
+            NextPomodoroStep();
+            StartNewPomodoro();
         }
 
         public void NextPomodoroStep()
         {
-            switch (Settings.CompletedPomodoro)
+            switch (Settings.CurrentPomodoroStep)
             {
-                case 0: Settings.TimerLengthInSec = 
+                case "Step0":
+                    Settings.TimerLengthInSec = Settings.ShortTimerBreakInSec;
+                    Settings.CurrentPomodoroStep = "Break0";
+                    break;
+                case "Break0":
+                    Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
+                    Settings.CurrentPomodoroStep = "Step1";
+                    break;
+                case "Step1":
+                    Settings.TimerLengthInSec = Settings.ShortTimerBreakInSec;
+                    Settings.CurrentPomodoroStep = "Break1";
+                    break;
+                case "Break1":
+                    Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
+                    Settings.CurrentPomodoroStep = "Step2";
+                    break;
+                case "Step2":
+                    Settings.TimerLengthInSec = Settings.ShortTimerBreakInSec;
+                    Settings.CurrentPomodoroStep = "Break2";
+                    break;
+                case "Break2":
+                    Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
+                    Settings.CurrentPomodoroStep = "Step3";
+                    break;
+                case "Step3":
+                    Settings.TimerLengthInSec = Settings.ShortTimerBreakInSec;
+                    Settings.CurrentPomodoroStep = "Break3";
+                    break;
+                case "Break3":
+                    Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
+                    Settings.CurrentPomodoroStep = "Stop";
+                    break;
+                case "Stop":
+                    Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
+                    Settings.CurrentPomodoroStep = "Step0";
+                    break;
+                default: break;
             }
         }
         public void MarkTaskComplete()
         {
-
+            Settings.TimerLengthInSec = Settings.PomodoroTimerLengthInSec;
         }
 
     }
