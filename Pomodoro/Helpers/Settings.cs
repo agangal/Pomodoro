@@ -9,7 +9,7 @@ namespace Pomodoro.Helpers
 {
     public class Settings
     {
-       
+
         public static int CompletedPomodoro
         {
             get
@@ -37,7 +37,7 @@ namespace Pomodoro.Helpers
             {
                 if (ApplicationData.Current.LocalSettings.Values["TimerLengthInSec"] == null)
                 {
-                    return 120;
+                    return Settings.PomodoroTimerLengthInSec;
                 }
                 else
                 {
@@ -53,27 +53,27 @@ namespace Pomodoro.Helpers
             }
         }
 
-        public static long RemainingTimerInSec
-        {
-            get
-            {
-                if (ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"] == null)
-                {
-                    return 1500;
-                }
-                else
-                {
-                    long res;
-                    long.TryParse(ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"].ToString(), out res);
-                    return (res);
-                }
-            }
+        //public static long RemainingTimerInSec
+        //{
+        //    get
+        //    {
+        //        if (ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"] == null)
+        //        {
+        //            return Settings.PomodoroTimerLengthInSec;
+        //        }
+        //        else
+        //        {
+        //            long res;
+        //            long.TryParse(ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"].ToString(), out res);
+        //            return (res);
+        //        }
+        //    }
 
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"] = value.ToString();
-            }
-        }
+        //    set
+        //    {
+        //        ApplicationData.Current.LocalSettings.Values["RemainingTimerInSec"] = value.ToString();
+        //    }
+        //}
 
         public static long TickWindowBegin
         {
@@ -116,6 +116,91 @@ namespace Pomodoro.Helpers
             set
             {
                 ApplicationData.Current.LocalSettings.Values["ElapsedSeconds"] = value.ToString();
+            }
+        }
+
+        public static long ShortTimerBreakInSec
+        {
+            get
+            {
+                if (ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"] == null)
+                {
+                    return 5;
+                }
+                else
+                {
+                    long res;
+                    long.TryParse(ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"].ToString(), out res);
+                    return (res);
+                }
+            }
+
+            //set
+            //{
+            //    ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"] = value.ToString();
+            //}
+        }
+
+        public static long PomodoroTimerLengthInSec
+        {
+            get
+            {
+                if (ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"] == null)
+                {
+                    return 120;
+                }
+                else
+                {
+                    long res;
+                    long.TryParse(ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"].ToString(), out res);
+                    return (res);
+                }
+            }
+
+            //set
+            //{
+            //    ApplicationData.Current.LocalSettings.Values["ShortTimerBreakInSec"] = value.ToString();
+            //}
+        }
+
+        public static long LongTimerBreakInSec
+        {
+            get
+            {
+                if (ApplicationData.Current.LocalSettings.Values["LongTimerBreakInSec"] == null)
+                {
+                    return 15;
+                }
+                else
+                {
+                    long res;
+                    long.TryParse(ApplicationData.Current.LocalSettings.Values["LongTimerBreakInSec"].ToString(), out res);
+                    return (res);
+                }
+            }
+
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["LongTimerBreakInSec"] = value.ToString();
+            }
+        }
+
+        public static string CurrentPomodoroStep
+        {
+            get
+            {
+                if (ApplicationData.Current.LocalSettings.Values["CurrentPomodoroStep"] == null)
+                {
+                    return (App.GetDescription(PomodoroSteps.Pomodoro_Step0));
+                }
+                else
+                {
+                    return (ApplicationData.Current.LocalSettings.Values["CurrentPomodoroStep"].ToString());
+                }
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["CurrentPomodoroStep"] = value;
             }
         }
     }
